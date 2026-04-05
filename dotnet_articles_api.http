@@ -1,0 +1,6 @@
+@dotnet_articles_api_HostAddress = http://localhost:5052
+
+GET {{dotnet_articles_api_HostAddress}}/swagger/
+Accept: application/json
+
+###

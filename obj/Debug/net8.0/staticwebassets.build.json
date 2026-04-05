@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Vm5I8NRdsmbGv32/PcJXNWn714C5rIeFM1G4WwHNUmE=",
+  "Source": "dotnet_articles_api",
+  "BasePath": "_content/dotnet_articles_api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
