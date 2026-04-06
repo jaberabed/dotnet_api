@@ -5,7 +5,7 @@ using dotnet_articles_api.Models;
 
 namespace dotnet_articles_api.Infrastructure.Repositories
 {
-    public class InMemoryRepository : IRepository
+    public class InMemoryRepository : IRepository, IArticles
     {
         private readonly Dictionary<Guid, Article> _articles = new();
         private readonly Dictionary<Guid, ArticleInformation> _articleInformations = new(); // ✅ New
@@ -90,6 +90,31 @@ namespace dotnet_articles_api.Infrastructure.Repositories
 
             _articleInformations[info.ArticleId] = info; // ✅ Overwrite existing
             return true;
+        }
+
+        public IEnumerable<ArticleInformationDto> GetAllArticles()
+        {
+            var result = new List<ArticleInformationDto>();
+
+            foreach (var info in _articleInformations.Values)
+            {
+                // Try to find the related article
+                _articles.TryGetValue(info.ArticleId, out var article);
+
+                result.Add(new ArticleInformationDto
+                {
+                    Id = info.Id,
+                    ArticleId = info.ArticleId,
+                    Author = info.Author,
+                    Category = info.Category,
+                    PublishedDate = info.PublishedDate,
+                    ReadTimeMinutes = info.ReadTimeMinutes,
+                    Title = article?.Title ?? string.Empty,
+                    Body = article?.Body ?? string.Empty
+                });
+            }
+
+            return result;
         }
     }
 }

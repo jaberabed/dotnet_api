@@ -22,7 +22,7 @@ namespace dotnet_articles_api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("dotnet_articles_api.Article", b =>
+            modelBuilder.Entity("dotnet_articles_api.Models.Article", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace dotnet_articles_api.Migrations
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("dotnet_articles_api.ArticleInformation", b =>
+            modelBuilder.Entity("dotnet_articles_api.Models.ArticleInformation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,11 +49,9 @@ namespace dotnet_articles_api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Author")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Category")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PublishedDate")
@@ -70,21 +68,56 @@ namespace dotnet_articles_api.Migrations
                     b.ToTable("ArticleInformations");
                 });
 
-            modelBuilder.Entity("dotnet_articles_api.ArticleInformation", b =>
+            modelBuilder.Entity("dotnet_articles_api.Models.ArticleInformationDto", b =>
                 {
-                    b.HasOne("dotnet_articles_api.Article", "Article")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PublishedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ReadTimeMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArticleInformationDtos");
+                });
+
+            modelBuilder.Entity("dotnet_articles_api.Models.ArticleInformation", b =>
+                {
+                    b.HasOne("dotnet_articles_api.Models.Article", "Article")
                         .WithOne("ArticleInformation")
-                        .HasForeignKey("dotnet_articles_api.ArticleInformation", "ArticleId")
+                        .HasForeignKey("dotnet_articles_api.Models.ArticleInformation", "ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Article");
                 });
 
-            modelBuilder.Entity("dotnet_articles_api.Article", b =>
+            modelBuilder.Entity("dotnet_articles_api.Models.Article", b =>
                 {
-                    b.Navigation("ArticleInformation")
-                        .IsRequired();
+                    b.Navigation("ArticleInformation");
                 });
 #pragma warning restore 612, 618
         }

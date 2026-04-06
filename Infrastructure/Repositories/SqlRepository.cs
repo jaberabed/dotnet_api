@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_articles_api.Infrastructure.Repositories
 {
-    public class SqlRepository : IRepository
+    public class SqlRepository : IRepository, IArticles
     {
         private readonly ArticlesDbContext _context;
 
@@ -31,6 +31,12 @@ namespace dotnet_articles_api.Infrastructure.Repositories
                 throw new ArgumentException("Title cannot be null or empty.");
 
             article.Id = Guid.NewGuid();
+
+            if (article.ArticleInformation != null)
+            {
+                article.ArticleInformation.Id = Guid.NewGuid();
+                article.ArticleInformation.ArticleId = article.Id;
+            }
             _context.Articles.Add(article);
             _context.SaveChanges();
             return article.Id;
@@ -97,6 +103,25 @@ namespace dotnet_articles_api.Infrastructure.Repositories
             _context.Entry(exists).CurrentValues.SetValues(info);
             _context.SaveChanges();
             return true;
+        }
+
+        public IEnumerable<ArticleInformationDto> GetAllArticles()
+        {
+            return
+              _context.ArticleInformations
+                 .Include(ai => ai.Article)                  // JOIN Articles table
+                 .Select(ai => new ArticleInformationDto
+                 {
+                     Id = ai.Id,
+                     ArticleId = ai.ArticleId,
+                     Author = ai.Author,
+                     Category = ai.Category,
+                     PublishedDate = ai.PublishedDate,
+                     ReadTimeMinutes = ai.ReadTimeMinutes,
+                     Title = ai.Article != null ? ai.Article.Title : string.Empty,
+                     Body = ai.Article != null ? ai.Article.Body : string.Empty
+                 })
+                 .ToList();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using dotnet_articles_api.Infrastructure.Data;
+﻿using dotnet_articles_api.Controllers;
+using dotnet_articles_api.Infrastructure.Data;
 using dotnet_articles_api.Infrastructure.Logging;
 using dotnet_articles_api.Infrastructure.Repositories;
 using dotnet_articles_api.Interfaces;
@@ -18,6 +19,7 @@ builder.Services.AddControllers()
 // Register our repository and logger
 builder.Services.AddSingleton<IRepository, InMemoryRepository>();
 builder.Services.AddSingleton<LoggerProxy>();
+builder.Services.AddSingleton<IArticles, InMemoryRepository>();
 
 // Register your custom logger
 builder.Services.AddSingleton<IAppLogger, FileLogger>(); // ✅ Add this
@@ -32,6 +34,7 @@ builder.Services.AddDbContext<ArticlesDbContext>(options =>
 
 // ✅ Switch from InMemoryRepository to SqlRepository
 builder.Services.AddScoped<IRepository, SqlRepository>();
+builder.Services.AddScoped<IArticles, SqlRepository>();
 builder.Services.AddSingleton<LoggerProxy>();
 
 var app = builder.Build();

@@ -12,6 +12,8 @@ namespace dotnet_articles_api.Infrastructure.Data
         public DbSet<Article> Articles { get; set; }
         public DbSet<ArticleInformation> ArticleInformations { get; set; }
 
+        public DbSet<ArticleInformationDto> ArticleInformationDtos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // One Article → One ArticleInformation
