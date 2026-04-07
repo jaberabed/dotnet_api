@@ -39,7 +39,13 @@ public class ArticlesController : ControllerBase
             _logger.LogError("Article object is null"); // ✅
             return BadRequest();
         }
-
+        try
+        {
+        }
+        catch (Exception)
+        {
+            throw;
+        }
         var id = _repository.Create(article);
         _logger.LogInfo($"Article created with id: {id}"); // ✅
         return Created($"/api/articles/{id}", new { id });
